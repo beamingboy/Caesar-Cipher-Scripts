@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Description: 
+# Uses the pattern generated from Creat_pattern and 
+# caesar encodes each line based on the case of text.
+
+# Get pattern from external script 'create_pattern'
+pattern=$(./create_pattern $@)
+
+upperCase=1
+
+#  Checking if the pattern in upperCase
+if [[ $pattern =~ [A-Z] ]]; then
+    upperCase=0
+fi
+
+# Reading the file and using encoding each line
+while IFS= read -r line
+    do      
+        # encode each line based on pattern
+        if [ $upperCase -eq 0 ];
+        then
+            echo "$line" | tr '[A-Z]' $pattern
+        else
+            echo "$line" | tr '[a-z]' $pattern
+        fi
+    done
+

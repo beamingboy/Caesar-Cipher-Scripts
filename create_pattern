@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# Description: 
+# Generates the pattern based on the provided shift value and 
+# optionally converts it to uppercase. 
+
+options=":k:u"
+upperCase=1
+
+#using the getopts for switches
+while getopts ${options} opt; do
+	case $opt in
+		
+		k)
+			shift=$OPTARG
+			;;
+		u)
+			upperCase=0
+			;;
+
+		:)
+			echo "Option Requires an Argument"
+			exit 1
+			;;
+
+		?)
+			echo "invalid option: -$OPTARG"
+			exit 1
+			;;
+	esac
+done
+
+# Calculating the shifted alphabet
+firstAlphabet=$(expr $shift + 97)
+secondAlphabet=$(expr $shift + 97 - 1)
+
+# Converting the pattern to Uppercase if -u switch passed
+if [ $upperCase -eq 0 ]; then
+    firstAlphabet=$((firstAlphabet - 32))
+    secondAlphabet=$((secondAlphabet - 32))
+fi
+
+# Converting the decimal to string alphabet
+firstResult=$(printf "\\$(printf "%03o" $firstAlphabet)")
+secondResult=$(printf "\\$(printf "%03o" $secondAlphabet)")
+
+# Output formatting
+if [ $upperCase -eq 0 ]
+then
+	output="[${firstResult}-ZA-${secondResult}]"
+else
+	output="[${firstResult}-za-${secondResult}]"
+fi
+
+echo "$output"
+
+
+
+

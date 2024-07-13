@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Description: 
+# Use input and prints all possible caesar shifts for 1..25 
+
+
+
+# Check if filename is provided
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <filename>"
+    exit 1
+fi
+
+filename=$1
+shifted_second='A'
+
+# Loop through shifts
+for i in {1..25};do
+
+    echo "Shift $i"
+
+    # Converting the decimal to string alphabet (here 65 is the ASCII value of 'A')
+    shifted_first=$(printf "\\$(printf "%03o" $((65 + i)))")
+
+    # Reading the file and using decoding each line
+    while IFS= read -r line
+    do
+        echo "$line" | tr  '[A-Z]' "[$shifted_first-ZA-$shifted_second]"
+    done < $filename
+
+    # Converting the decimal to string alphabet (here 65 is the ASCII value of 'A')
+    shifted_second=$(printf "\\$(printf "%03o" $((65 + i)))")
+done
